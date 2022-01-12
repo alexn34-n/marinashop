@@ -20,16 +20,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class ProductService {
-    //    private List<Product> products=new ArrayList<>();
-//    private long ID=0;
-//
-//    {
-//        products.add(new Product(++ID,"Boat 1 ","Simple boat",77000,"Kaluga","Terry"));
-//        products.add(new Product(++ID,"Boat motor","Simple boat motor",27000,"Moscow","Andrew"));
-//    }
     private final ProductRepository productRepository;
-    private  final UserRepository userRepository;
-
+    private final UserRepository userRepository;
 
     public List<Product> listProducts(String title) {
         if (title != null) return productRepository.findByTitle(title);
@@ -75,18 +67,21 @@ public class ProductService {
         return image;
     }
 
-
-    public void deleteProduct(Long id){
-      //  products.removeIf(product -> product.getId().equals(id));
-        productRepository.deleteById(id);
-    }
+    public void deleteProduct(User user, Long id) {
+        Product product = productRepository.findById(id)
+                .orElse(null);
+        if (product != null) {
+            if (product.getUser().getId().equals(user.getId())) {
+                productRepository.delete(product);
+                log.info("Product with id = {} was deleted", id);
+            } else {
+                log.error("User: {} haven't this product with id = {}", user.getEmail(), id);
+            }
+        } else {
+            log.error("Product with id = {} is not found", id);
+        }    }
 
     public Product getProductById(Long id) {
-//        for (Product product : products) {
-//            if (product.getId().equals(id)) return product;
-//        }
-
-       // return null;
-        return  productRepository.findById(id).orElse(null);
+        return productRepository.findById(id).orElse(null);
     }
 }
