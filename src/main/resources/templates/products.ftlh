@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>MARINA SHOP</title>
 </head>
 <body>
   <h1>MARINA SHOP!</h1><hr>
-
   <h4> Товары для моря, озер и рек</h4>
+  <form action="/" method="get">
+        Поиск по названию объявления: <input type="text" name="title"><br>
+        <input type="submit" value="Поиск"/>
+  </form>
   <#list products  as product>
       <div>
           <p><b>${product.title}</b>${product.price} руб.|<a href="/product/${product.id}">Подробнее...</a></p>
       </div>
+      <#else>
+      <h3>Товары отсутствуют</h3>
   </#list>
 <hr>
 <h3>Создать новый товар</h3>
